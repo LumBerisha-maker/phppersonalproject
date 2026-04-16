@@ -1,46 +1,62 @@
+<?php
+include "db.php";
+include "functions.php";
+
+$products = getProducts($conn);
+$title = "Sports Shop";
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title><?php echo $title; ?></title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Features</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Pricing</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown link
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
+
+<header>
+    <h1><?php echo $title; ?></h1>
+</header>
+
+<!-- Slider -->
+<div class="slider">
+    <div class="slides">
+        <img src="https://via.placeholder.com/1200x300?text=Football">
+        <img src="https://via.placeholder.com/1200x300?text=Basketball">
+        <img src="https://via.placeholder.com/1200x300?text=Fitness">
+    </div>
+</div>
+
+<div class="container">
+    <h2>Products</h2>
+
+    <?php
+    // LOOP
+    if ($products->num_rows > 0) {
+        while($row = $products->fetch_assoc()) {
+    ?>
+
+        <div class="product">
+            <img src="<?php echo $row['image']; ?>" width="100%">
+            <h3><?php echo $row['name']; ?></h3>
+            <p>$<?php echo $row['price']; ?></p>
+
+            <!-- CONDITIONAL -->
+            <?php if ($row['price'] > 50): ?>
+                <p style="color:red;">Premium Product</p>
+            <?php else: ?>
+                <p style="color:green;">Budget Friendly</p>
+            <?php endif; ?>
         </div>
-      </li>
-    </ul>
-  </div>
-</nav>
 
+    <?php
+        }
+    } else {
+        echo "No products found";
+    }
+    ?>
 
-
-
-
+</div>
 
 </body>
 </html>
