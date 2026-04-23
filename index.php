@@ -1,18 +1,24 @@
-<?php include("header.php"); ?>
+<?php
+require "./config/db.php";
+require "./products.php";
+require "./functions.php";
 
-<section class="hero">
-    <h1>Welcome to Sports Shop</h1>
-    <p>Best sports gear in one place</p>
-    <a href="products.php" class="btn">Shop Now</a>
-</section>
+$product = new Product($pdo);
+$products = $product->getAll();
 
-<section class="featured">
-    <h2>Featured Products</h2>
-    <div class="cards">
-        <img src="images/ffoootball.webp" alt="Football Boots">
-        <img src="images/kobee.webp" alt="Basketball Jersey">
-        <img src="images/adidasbottle.avif" alt="Adidas Bottle">
-    </div>
-</section>
+include "./header.php";
+?>
 
-<?php include("footer.php"); ?>
+<a href="./admin/dashboard.php">Admin Dashboard</a>
+
+<?php foreach($products as $p): ?>
+    <?php if($p['price'] > 0): ?>
+        <div class="card">
+            <img src="../images/<?php echo $p['image']; ?>" width="150">
+            <h3><?php echo $p['name']; ?></h3>
+            <p><?php echo formatPrice($p['price']); ?></p>
+        </div>
+    <?php endif; ?>
+<?php endforeach; ?>
+
+<?php include "./footer.php"; ?>

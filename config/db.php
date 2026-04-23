@@ -1,7 +1,4 @@
 <?php
-$conn = mysqli_connect("localhost", "root", "", "sports-shop");
-
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+$pdo = new PDO("mysql:host=localhost;dbname=sport-shop", "root", "");
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 ?>
