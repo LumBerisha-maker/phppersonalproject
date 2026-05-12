@@ -1,67 +1,107 @@
+
 <?php
 include '../config.php';
+
+if(!isset($_SESSION['user']) || $_SESSION['role'] != 'admin'){
+header("Location: ../login.php");
+}
+
+$stmt = $conn->prepare("SELECT * FROM products");
+$stmt->execute();
+
+$products = $stmt->fetchAll();
+
+$count = $conn->query("SELECT COUNT(*) FROM products")->fetchColumn();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
-<body>
+
+<body class="bg-light">
 
 <div class="container mt-5">
 
-    <h1 class="mb-4">Admin Dashboard</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+<h1>Admin Dashboard</h1>
 
-    <a href="add_product.php" class="btn btn-success mb-3">
-        Add Product
-    </a>
+<a href="../logout.php" class="btn btn-danger">
+Logout
+</a>
+</div>
 
-    <table class="table table-bordered table-striped">
+<div class="row">
 
-        <tr>
-            <th>ID</th>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Actions</th>
-        </tr>
+<div class="col-md-4">
 
-        <?php
-        $stmt = $pdo->query("SELECT * FROM products");
+<div class="card bg-dark text-white shadow-lg dashboard-card">
 
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        ?>
+<div class="card-body">
 
-        <tr>
-            <td><?php echo $row['id']; ?></td>
+<h4>Total Products</h4>
 
-            <td>
-                <img src="../images/<?php echo $row['image']; ?>" width="80">
-            </td>
+<h1><?php echo $count; ?></h1>
 
-            <td><?php echo $row['name']; ?></td>
+</div>
+</div>
+</div>
 
-            <td>$<?php echo $row['price']; ?></td>
+</div>
 
-            <td>
-                <a href="edit_product.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
-                    Edit
-                </a>
+<a href="add_product.php" class="btn btn-success mt-4 mb-4">
+Add Product
+</a>
 
-                <a href="delete_product.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">
-                    Delete
-                </a>
-            </td>
-        </tr>
+<div class="card shadow border-0">
 
-        <?php } ?>
+<div class="card-body">
 
-    </table>
+<table class="table table-hover">
+
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Price</th>
+<th>Category</th>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+
+<?php foreach($products as $product){ ?>
+
+<tr>
+
+<td><?php echo $product['id']; ?></td>
+<td><?php echo $product['name']; ?></td>
+<td><?php echo $product['price']; ?> €</td>
+<td><?php echo $product['category']; ?></td>
+
+<td>
+<a href="edit_product.php?id=<?php echo $product['id']; ?>" class="btn btn-primary btn-sm">
+Edit
+</a>
+</td>
+
+<td>
+<a href="delete_product.php?id=<?php echo $product['id']; ?>" class="btn btn-danger btn-sm">
+Delete
+</a>
+</td>
+
+</tr>
+
+<?php } ?>
+
+</table>
+
+</div>
+</div>
 
 </div>
 

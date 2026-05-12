@@ -1,71 +1,60 @@
+
 <?php
 include '../config.php';
 
-if(isset($_POST['add_product'])) {
+if(isset($_POST['submit'])){
 
-    $name = $_POST['name'];
-    $description = $_POST['description'];
-    $price = $_POST['price'];
-    $image = $_POST['image'];
+$name = $_POST['name'];
+$description = $_POST['description'];
+$price = $_POST['price'];
+$image = $_POST['image'];
+$category = $_POST['category'];
 
-    $sql = "INSERT INTO products(name, description, price, image)
-            VALUES(:name, :description, :price, :image)";
+$stmt = $conn->prepare("INSERT INTO products(name,description,price,image,category)
+VALUES(?,?,?,?,?)");
 
-    $stmt = $pdo->prepare($sql);
+$stmt->execute([$name,$description,$price,$image,$category]);
 
-    $stmt->execute([
-        ':name' => $name,
-        ':description' => $description,
-        ':price' => $price,
-        ':image' => $image
-    ]);
-
-    header("Location: dashboard.php");
+header("Location: dashboard.php");
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Product</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>Add Product</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+
+<body class="bg-light">
 
 <div class="container mt-5">
 
-    <h2>Add Product</h2>
+<div class="card shadow border-0">
+<div class="card-body p-5">
 
-    <form method="POST">
+<h2 class="mb-4">Add Product</h2>
 
-        <div class="mb-3">
-            <label>Name</label>
-            <input type="text" name="name" class="form-control" required>
-        </div>
+<form method="POST">
 
-        <div class="mb-3">
-            <label>Description</label>
-            <textarea name="description" class="form-control" required></textarea>
-        </div>
+<input type="text" name="name" class="form-control mb-3" placeholder="Product Name">
 
-        <div class="mb-3">
-            <label>Price</label>
-            <input type="number" step="0.01" name="price" class="form-control" required>
-        </div>
+<textarea name="description" class="form-control mb-3" placeholder="Description"></textarea>
 
-        <div class="mb-3">
-            <label>Image Name</label>
-            <input type="text" name="image" class="form-control" placeholder="football.jpg" required>
-        </div>
+<input type="text" name="price" class="form-control mb-3" placeholder="Price">
 
-        <button type="submit" name="add_product" class="btn btn-success">
-            Add Product
-        </button>
+<input type="text" name="image" class="form-control mb-3" placeholder="Image Name">
 
-    </form>
+<input type="text" name="category" class="form-control mb-3" placeholder="Category">
+
+<button type="submit" name="submit" class="btn btn-success">
+Add Product
+</button>
+
+</form>
+
+</div>
+</div>
 
 </div>
 

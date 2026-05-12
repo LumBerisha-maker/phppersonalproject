@@ -4,29 +4,26 @@ include 'config.php';
 
 $message = "";
 
-if(isset($_POST['login'])){
+if(isset($_POST['register'])){
 
+$username = $_POST['username'];
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-$stmt = $conn->prepare("SELECT * FROM users WHERE email=? AND password=?");
-$stmt->execute([$email,$password]);
+if(empty($username) || empty($email) || empty($password)){
 
-$user = $stmt->fetch();
-
-if($user){
-
-$_SESSION['user'] = $user['username'];
-$_SESSION['role'] = $user['role'];
-
-if($user['role'] == 'admin'){
-header("Location: admin/dashboard.php");
-}else{
-header("Location: index.php");
-}
+$message = "Please fill all fields";
 
 }else{
-$message = "Wrong email or password";
+
+$role = "user";
+
+$stmt = $conn->prepare("INSERT INTO users(username,email,password,role)
+VALUES(?,?,?,?)");
+
+$stmt->execute([$username,$email,$password,$role]);
+
+$message = "Account created successfully";
 }
 }
 ?>
@@ -35,7 +32,7 @@ $message = "Wrong email or password";
 <html>
 <head>
 
-<title>Login</title>
+<title>Register</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -58,19 +55,24 @@ $message = "Wrong email or password";
 
 <div class="text-center mb-4">
 <img src="images/prlogo.png" width="90">
-<h2 class="mt-3 fw-bold">Login</h2>
-<p class="text-muted">Login to your account</p>
+<h2 class="mt-3 fw-bold">Create Account</h2>
+<p class="text-muted">Join Prishtina Sports Shop</p>
 </div>
 
 <?php if($message != ""){ ?>
 
-<div class="alert alert-danger">
+<div class="alert alert-info">
 <?php echo $message; ?>
 </div>
 
 <?php } ?>
 
 <form method="POST">
+
+<div class="mb-3">
+<label>Username</label>
+<input type="text" name="username" class="form-control form-control-lg">
+</div>
 
 <div class="mb-3">
 <label>Email</label>
@@ -82,15 +84,15 @@ $message = "Wrong email or password";
 <input type="password" name="password" class="form-control form-control-lg">
 </div>
 
-<button type="submit" name="login" class="btn btn-dark w-100 btn-lg">
-Login
+<button type="submit" name="register" class="btn btn-primary btn-lg w-100">
+Register
 </button>
 
 </form>
 
 <div class="text-center mt-3">
-<a href="register.php">
-Create Account
+<a href="login.php">
+Already have an account?
 </a>
 </div>
 

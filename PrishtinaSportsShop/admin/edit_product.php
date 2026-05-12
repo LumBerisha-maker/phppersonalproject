@@ -1,105 +1,67 @@
+
 <?php
 include '../config.php';
 
 $id = $_GET['id'];
 
-$stmt = $pdo->prepare("SELECT * FROM products WHERE id = :id");
-$stmt->execute([':id' => $id]);
+$stmt = $conn->prepare("SELECT * FROM products WHERE id=?");
+$stmt->execute([$id]);
 
-$product = $stmt->fetch(PDO::FETCH_ASSOC);
+$product = $stmt->fetch();
 
-if(isset($_POST['update_product'])) {
+if(isset($_POST['update'])){
 
-    $name = $_POST['name'];
-    $description = $_POST['description'];
-    $price = $_POST['price'];
-    $image = $_POST['image'];
+$name = $_POST['name'];
+$description = $_POST['description'];
+$price = $_POST['price'];
+$image = $_POST['image'];
+$category = $_POST['category'];
 
-    $sql = "UPDATE products
-            SET
-                name = :name,
-                description = :description,
-                price = :price,
-                image = :image
-            WHERE id = :id";
+$update = $conn->prepare("UPDATE products SET name=?,description=?,price=?,image=?,category=? WHERE id=?");
 
-    $stmt = $pdo->prepare($sql);
+$update->execute([$name,$description,$price,$image,$category,$id]);
 
-    $stmt->execute([
-        ':name' => $name,
-        ':description' => $description,
-        ':price' => $price,
-        ':image' => $image,
-        ':id' => $id
-    ]);
-
-    header("Location: dashboard.php");
+header("Location: dashboard.php");
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>Edit Product</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+
+<body class="bg-light">
 
 <div class="container mt-5">
 
-    <h2>Edit Product</h2>
+<div class="card shadow border-0">
 
-    <form method="POST">
+<div class="card-body p-5">
 
-        <div class="mb-3">
-            <label>Name</label>
+<h2 class="mb-4">Edit Product</h2>
 
-            <input type="text"
-                   name="name"
-                   class="form-control"
-                   value="<?php echo $product['name']; ?>"
-                   required>
-        </div>
+<form method="POST">
 
-        <div class="mb-3">
-            <label>Description</label>
+<input type="text" name="name" class="form-control mb-3" value="<?php echo $product['name']; ?>">
 
-            <textarea name="description"
-                      class="form-control"
-                      required><?php echo $product['description']; ?></textarea>
-        </div>
+<textarea name="description" class="form-control mb-3"><?php echo $product['description']; ?></textarea>
 
-        <div class="mb-3">
-            <label>Price</label>
+<input type="text" name="price" class="form-control mb-3" value="<?php echo $product['price']; ?>">
 
-            <input type="number"
-                   step="0.01"
-                   name="price"
-                   class="form-control"
-                   value="<?php echo $product['price']; ?>"
-                   required>
-        </div>
+<input type="text" name="image" class="form-control mb-3" value="<?php echo $product['image']; ?>">
 
-        <div class="mb-3">
-            <label>Image Name</label>
+<input type="text" name="category" class="form-control mb-3" value="<?php echo $product['category']; ?>">
 
-            <input type="text"
-                   name="image"
-                   class="form-control"
-                   value="<?php echo $product['image']; ?>"
-                   required>
-        </div>
+<button type="submit" name="update" class="btn btn-primary">
+Update Product
+</button>
 
-        <button type="submit"
-                name="update_product"
-                class="btn btn-primary">
-            Update Product
-        </button>
+</form>
 
-    </form>
+</div>
+</div>
 
 </div>
 

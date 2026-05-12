@@ -1,53 +1,47 @@
-CREATE DATABASE prishtina_sports_shop;
+
+CREATE DATABASE IF NOT EXISTS prishtina_sports_shop;
 
 USE prishtina_sports_shop;
 
-CREATE TABLE products (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
-    image VARCHAR(255) NOT NULL
+CREATE TABLE users(
+id INT AUTO_INCREMENT PRIMARY KEY,
+username VARCHAR(100),
+email VARCHAR(100),
+password VARCHAR(100),
+role VARCHAR(50)
 );
 
-INSERT INTO products (name, description, price, image) VALUES
+CREATE TABLE products(
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100),
+description TEXT,
+price DECIMAL(10,2),
+image VARCHAR(255),
+category VARCHAR(100)
+);
 
-('Football',
- 'Professional football for matches and training.',
- 25.00,
- 'football.png'),
+INSERT INTO users(username,email,password,role) VALUES
+('admin','admin@gmail.com','admin123','admin'),
+('muharrem','muharrem@gmail.com','123456','user'),
+('ardit','ardit@gmail.com','123456','user'),
+('leon','leon@gmail.com','123456','user');
 
-('Basketball',
- 'High quality basketball for indoor and outdoor games.',
- 30.00,
- 'basketball.png'),
+INSERT INTO products(name,description,price,image,category) VALUES
 
-('10KG Dumbbell',
- 'Heavy dumbbell for gym and strength workouts.',
- 40.00,
- '10kgdumbell.png'),
+('Football','Professional football for matches and training.',25,'football.png','Football'),
 
-('Blue Shoes',
- 'Comfortable blue sports shoes.',
- 55.00,
- 'blueshoes.jpg'),
+('Basketball','Official orange basketball with strong grip.',30,'basketball.png','Basketball'),
 
-('Gym Ball',
- 'Fitness gym ball for workouts and stretching.',
- 20.00,
- 'gymball.png'),
+('Gym Ball','Fitness gym ball for workouts and stretching.',20,'gymball.png','Fitness'),
 
-('Pull Up Bar',
- 'Strong pull up bar for home workouts.',
- 35.00,
- 'pullupbar.png'),
+('10KG Dumbbell','Heavy dumbbell for strength exercises.',45,'10kgdumbell.png','Fitness'),
 
-('White Shoes',
- 'Stylish white running shoes.',
- 60.00,
- 'whiteshoes.png'),
+('Blue Running Shoes','Comfortable blue shoes for running.',60,'blueshoes.jpg','Shoes'),
 
-('Yellow Shoes',
- 'Sporty yellow shoes with modern design.',
- 58.00,
- 'yellowshoes.png');
+('White Sport Shoes','Modern white sport shoes.',70,'whiteshoes.png','Shoes'),
+
+('Yellow Sneakers','Stylish yellow sneakers for sports.',65,'yellowshoes.png','Shoes'),
+
+('Pull Up Bar','Strong pull up bar for home gym.',50,'pullupbar.png','Fitness'),
+
+('Volleyball','Professional volleyball for teams.',22,'voley.jpg','Volleyball');
